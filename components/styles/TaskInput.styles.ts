@@ -1,0 +1,203 @@
+import { StyleSheet } from "react-native";
+import { AppColors } from "../../constants/colors";
+
+export const styles = StyleSheet.create({
+  inputContainer: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+  titleInputRow: {
+    borderWidth: 1.5,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    marginBottom: 14,
+  },
+  titleInput: {
+    height: 44,
+    fontSize: 14,
+  },
+  optionRow: {
+    marginBottom: 12,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  chipContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  chip: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+    borderWidth: 1.5,
+  },
+  chipText: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  webPickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  nativePickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    flexWrap: "wrap",
+  },
+  pickerButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    minWidth: 130,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  pickerButtonIcon: {
+    marginRight: 2,
+  },
+  pickerButtonText: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  pickerButtonPlaceholder: {
+    fontSize: 13,
+    fontWeight: "500",
+    opacity: 0.5,
+  },
+  clearBtn: {
+    padding: 6,
+    borderRadius: 20,
+  },
+  addButton: {
+    backgroundColor: AppColors.primary,
+    borderRadius: 10,
+    height: 44,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 8,
+  },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  tagInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderRadius: 10,
+    paddingLeft: 12,
+    paddingRight: 6,
+    marginTop: 6,
+    height: 40,
+  },
+  tagInput: {
+    flex: 1,
+    fontSize: 12,
+    padding: 0,
+  },
+  tagAddBtn: {
+    padding: 6,
+  },
+  activeTagsList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: 8,
+  },
+  activeTagBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+    borderWidth: 1.5,
+  },
+  activeTagText: {
+    fontSize: 11,
+    fontWeight: "600",
+    marginRight: 4,
+  },
+  noteInputRow: {
+    borderWidth: 1.5,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 14,
+    minHeight: 80,
+  },
+  noteInput: {
+    fontSize: 14,
+    textAlignVertical: "top",
+    minHeight: 60,
+  },
+  subtaskSection: {
+    marginBottom: 12,
+  },
+  subtaskInputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderRadius: 10,
+    paddingLeft: 12,
+    paddingRight: 6,
+    marginTop: 6,
+    height: 40,
+  },
+  subtaskTextInput: {
+    flex: 1,
+    fontSize: 12,
+    padding: 0,
+  },
+  subtaskAddBtn: {
+    padding: 6,
+  },
+  subtaskList: {
+    marginTop: 8,
+    gap: 6,
+  },
+  subtaskItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  subtaskItemText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  subtaskRemoveBtn: {
+    padding: 4,
+    marginLeft: 6,
+  },
+});

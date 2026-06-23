@@ -1,0 +1,46 @@
+{
+  "extends": ["recommended"],
+
+  "plugins": ["react-native", "react", "testing-library"],
+
+  "rules": {
+    // React
+    "react/no-array-index-key": "error",
+    "react/no-unescaped-entities": "error",
+    "react/no-children-prop": "warn",
+
+    // React Native (best practices)
+    "react-native/no-inline-styles": "error",
+    "react-native/no-raw-text": "error",
+    "react-native/no-single-child": "error",
+    "react-native/sort-styles": ["error", "asc"],
+    "react-native/split-platform-components": "warn",
+
+    // Accessibility (WCAG AA)
+    "react-native/no-accessibility-label": "error",
+    "react-native/no-noninteractive-element-interactions": "error",
+    "react-native/use-has-checked": "warn",
+
+    // Performance
+    "react-native/no-color-literals": "warn",
+    "react-native/no-flat-list-comp": [
+      "warn",
+      {
+        "onlyFlatList": true,
+        "components": ["FlatList", "SectionList"],
+      },
+    ],
+
+    // Testing Library (React Testing Library)
+    "testing-library/no-await-async-queries": "error",
+    "testing-library/no-await-setup": "error",
+    "testing-library/no-debugging-utils": "warn",
+    "testing-library/no-dom-import": "error",
+    "testing-library/no-manual-cleanup": "error",
+    "testing-library/no-unnecessary-act": "error",
+    "testing-library/no-wait-for-multiple-assertions": "warn",
+    "testing-library/prefer-explicit-assert": "error",
+    "testing-library/prefer-user-event": "error",
+    "testing-library/use-consistent-accessor": "warn",
+  },
+}
