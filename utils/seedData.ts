@@ -8,6 +8,8 @@ bcrypt.setRandomFallback((len: number) => {
   return Array.from(buf);
 });
 
+import { getDB } from "./database";
+
 /**
  * Seed sample data into SQLite database.
  * Call this function once to populate test users and tasks.
@@ -17,7 +19,7 @@ bcrypt.setRandomFallback((len: number) => {
  *   - username: huantta  | password: 123456
  */
 export async function seedDatabase(): Promise<void> {
-  const db = await SQLite.openDatabaseAsync("taskmanager.db");
+  const db = getDB();
 
   // Check if data already exists
   const existingUser = await db.getFirstAsync<{ id: number }>(

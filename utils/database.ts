@@ -12,6 +12,11 @@ bcrypt.setRandomFallback((len: number) => {
 
 let db: SQLite.SQLiteDatabase | null = null;
 
+export function getDB(): SQLite.SQLiteDatabase {
+  if (!db) throw new Error("Database not initialized");
+  return db;
+}
+
 // ==================== DATABASE INITIALIZATION ====================
 
 export async function initDB(): Promise<void> {
@@ -318,4 +323,36 @@ export async function updateTaskTitleNoteSubtasksDB(
       );
     }
   }
+}
+
+// ==================== ADMIN OPERATIONS ====================
+
+export async function getAllUsersDB(): Promise<User[]> {
+  if (!db) await initDB();
+  const rows = await db!.getAllAsync<User>("SELECT id, fullname, email, username FROM users WHERE 1 = ? ORDER BY id ASC", 1);
+  return rows;
+}
+
+export async function getAllTasksCountDB(): Promise<number> {
+  if (!db) await initDB();
+  const result = await db!.getFirstAsync<{ count: number }>("SELECT COUNT(*) as count FROM tasks WHERE 1 = ?", 1);
+  return result?.count || 0;
+}
+
+export async function deleteUserDB(userId: number): Promise<void> {
+  if (!db) await initDB();
+  // Cascading deletes will handle tasks and subtasks
+  await db!.runAsync("DELETE FROM users WHERE id = ?", userId);
+}
+
+export async function clearAllDataDB(): Promise<void> {
+  if (!db) await initDB();
+  await db!.execAsync(`
+    DELETE FROM subtasks;
+    DELETE FROM tasks;
+    DELETE FROM users;
+    
+    -- Reset auto-increment counters
+    DELETE FROM sqlite_sequence WHERE name IN ('users', 'tasks', 'subtasks');
+  `);
 }

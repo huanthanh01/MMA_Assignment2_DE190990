@@ -109,7 +109,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <Text style={[styles.usernameText, { color: colors.text }]}>
             {user?.username || "Guest User"}
           </Text>
-          <Text style={styles.roleText}>Member</Text>
+          <Text style={styles.roleText}>{user?.username === 'admin' ? 'Admin' : 'Member'}</Text>
         </View>
 
         <View style={styles.menuSection}>
@@ -141,6 +141,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {isDark ? "Light Mode" : "Dark Mode"}
             </Text>
           </TouchableOpacity>
+
+          {user?.username === 'admin' && (
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)" }]}
+              onPress={() => {
+                onClose();
+                router.push("/admin" as any);
+              }}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="settings-outline" size={22} color="#8b5cf6" />
+              <Text style={[styles.menuItemText, { color: colors.text }]}>
+                Admin Panel
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Logout Button */}
