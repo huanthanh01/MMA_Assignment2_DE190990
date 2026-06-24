@@ -1,4 +1,5 @@
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
@@ -27,6 +28,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onToggleSignUp,
 }) => {
   const { isDark, setTheme } = useTheme();
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -189,7 +191,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <Text style={styles.rememberText}>Remember me</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/verify-account" as any)}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>

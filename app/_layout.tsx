@@ -21,6 +21,8 @@ export default function RootLayout() {
               <Stack.Screen name="home" />
               <Stack.Screen name="profile" />
               <Stack.Screen name="admin" />
+              <Stack.Screen name="verify-account" />
+              <Stack.Screen name="reset-password" />
             </Stack>
           </AppProvider>
         </AppThemeProvider>

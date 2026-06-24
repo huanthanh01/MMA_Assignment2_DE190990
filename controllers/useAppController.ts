@@ -259,8 +259,10 @@ export function useAppController() {
   };
 
   const handleSocialLogin = (platform: string) => {
-    Alert.alert("Social Login", `Logging in with ${platform}...`);
-    // Social login is still mock — no SQLite integration for external providers
+    Alert.alert(
+      "Feature in Development",
+      `Logging in with ${platform} is currently unavailable and under development. Please use a system account!`
+    );
   };
 
   const handleLogout = async () => {

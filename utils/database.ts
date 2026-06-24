@@ -158,6 +158,59 @@ export async function updateUserProfileDB(
   }
 }
 
+// ==================== FORGOT PASSWORD ====================
+
+export async function verifyUserAccount(
+  username: string,
+  email: string
+): Promise<{ success: boolean; error?: string; userId?: number }> {
+  if (!db) await initDB();
+
+  const row = await db!.getFirstAsync<{ id: number }>(
+    "SELECT id FROM users WHERE username = ? AND email = ?",
+    username,
+    email
+  );
+
+  if (!row) {
+    return { success: false, error: "No account found with that username and email" };
+  }
+
+  return { success: true, userId: row.id };
+}
+
+export async function resetUserPassword(
+  userId: number,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!db) await initDB();
+
+  // Validate password policy: 8+ chars, 1 uppercase, 1 digit
+  if (newPassword.length < 8) {
+    return { success: false, error: "Password must be at least 8 characters" };
+  }
+  if (!/[A-Z]/.test(newPassword)) {
+    return { success: false, error: "Password must contain at least 1 uppercase letter" };
+  }
+  if (!/[0-9]/.test(newPassword)) {
+    return { success: false, error: "Password must contain at least 1 number" };
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await db!.runAsync(
+      "UPDATE users SET password = ? WHERE id = ?",
+      hashedPassword,
+      userId
+    );
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to reset password. Please try again." };
+  }
+}
+
 // ==================== TASK CRUD OPERATIONS ====================
 
 export async function getTasksByUser(userId: number): Promise<Task[]> {
