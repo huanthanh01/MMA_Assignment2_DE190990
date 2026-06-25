@@ -79,45 +79,6 @@ export const styles = StyleSheet.create({
     fontWeight: "300",
     lineHeight: 18,
   },
-  inputBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    height: 48,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderWidth: 1.5,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  inputError: {
-    borderColor: AppColors.error,
-  },
-  textInput: {
-    flex: 1,
-    color: "#fff",
-    fontSize: 14,
-    height: "100%",
-  },
-  inputIcon: {
-    marginLeft: 10,
-  },
-  errorMsgText: {
-    color: AppColors.error,
-    fontSize: 11,
-    marginTop: -8,
-    marginBottom: 10,
-    paddingLeft: 4,
-  },
-  generalError: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "rgba(239, 68, 68, 0.3)",
-  },
   generalErrorText: {
     color: "#ef4444",
     fontSize: 13,
@@ -135,15 +96,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  btnContent: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  submitBtnText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "600",
   },
   // Verification success
   successContainer: {

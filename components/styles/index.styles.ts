@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
   },
   brandPanel: {
     width: "100%",
-    minHeight: 260, // Changed from fixed 180px to minHeight to fit all content on mobile
+    minHeight: 200, // Reduced height to look better proportionally
   },
   brandPanelLarge: {
     width: "45%",

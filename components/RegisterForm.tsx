@@ -1,13 +1,8 @@
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { TextInput, Button, HelperText, Text, useTheme as usePaperTheme } from "react-native-paper";
 import { AppColors } from "../constants/colors";
 import { registerUser } from "../utils/database";
 import { styles } from "./styles/RegisterForm.styles";
@@ -23,6 +18,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSocialLogin,
   onToggleLogin,
 }) => {
+  const theme = usePaperTheme();
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -61,11 +57,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       setIsLoading(true);
       setErrors({});
 
-      // Allow the UI to render the loading spinner before synchronous bcrypt blocks the JS thread
       await new Promise((resolve) => setTimeout(resolve, 50));
 
       try {
-        // Register user into SQLite with bcryptjs hashed password
         const result = await registerUser(
           fullname.trim(),
           email.trim().toLowerCase(),
@@ -82,7 +76,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           setConfirmPassword("");
           setErrors({});
         } else {
-          // Show specific error (e.g. "Username already exists")
           setErrors({ general: result.error || "Registration failed" });
         }
       } catch (error) {
@@ -95,8 +88,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
   return (
     <View style={styles.formContent}>
-      <Text style={styles.formTitle}>Create Account</Text>
-      <Text style={styles.formSubtitle}>Join us and start your journey</Text>
+      <Text variant="headlineSmall" style={styles.formTitle}>Create Account</Text>
+      <Text variant="bodyMedium" style={styles.formSubtitle}>Join us and start your journey</Text>
 
       {/* General Error Message */}
       {errors.general && (
@@ -110,154 +103,94 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             borderColor: "rgba(239, 68, 68, 0.3)",
           }}
         >
-          <Text
-            style={{
-              color: "#ef4444",
-              fontSize: 13,
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
+          <Text style={{ color: "#ef4444", fontSize: 13, fontWeight: "600", textAlign: "center" }}>
             ⚠️ {errors.general}
           </Text>
         </View>
       )}
 
       {/* Full Name */}
-      <View
-        style={[styles.inputBox, errors.fullname ? styles.inputError : null]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Full Name"
-          placeholderTextColor="#6b7280"
-          value={fullname}
-          onChangeText={(text) => {
-            setFullname(text);
-            if (errors.fullname) setErrors({ ...errors, fullname: "" });
-          }}
-        />
-        <Ionicons
-          name="card-outline"
-          size={20}
-          color="#6b7280"
-          style={styles.inputIcon}
-        />
-      </View>
-      {errors.fullname && (
-        <Text style={styles.errorMsgText}>{errors.fullname}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Full Name"
+        value={fullname}
+        onChangeText={(text) => {
+          setFullname(text);
+          if (errors.fullname) setErrors({ ...errors, fullname: "" });
+        }}
+        error={!!errors.fullname}
+        left={<TextInput.Icon icon="card-account-details-outline" />}
+        style={{ marginBottom: errors.fullname ? 0 : 12 }}
+      />
+      {errors.fullname && <HelperText type="error" visible={!!errors.fullname}>{errors.fullname}</HelperText>}
 
       {/* Email */}
-      <View style={[styles.inputBox, errors.email ? styles.inputError : null]}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          placeholderTextColor="#6b7280"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            if (errors.email) setErrors({ ...errors, email: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <Ionicons
-          name="mail-outline"
-          size={20}
-          color="#6b7280"
-          style={styles.inputIcon}
-        />
-      </View>
-      {errors.email && <Text style={styles.errorMsgText}>{errors.email}</Text>}
+      <TextInput
+        mode="outlined"
+        label="Email"
+        value={email}
+        onChangeText={(text) => {
+          setEmail(text);
+          if (errors.email) setErrors({ ...errors, email: "" });
+        }}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        error={!!errors.email}
+        left={<TextInput.Icon icon="email-outline" />}
+        style={{ marginBottom: errors.email ? 0 : 12 }}
+      />
+      {errors.email && <HelperText type="error" visible={!!errors.email}>{errors.email}</HelperText>}
 
       {/* Username */}
-      <View
-        style={[styles.inputBox, errors.username ? styles.inputError : null]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Username"
-          placeholderTextColor="#6b7280"
-          value={username}
-          onChangeText={(text) => {
-            setUsername(text);
-            if (errors.username) setErrors({ ...errors, username: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <Ionicons
-          name="person-outline"
-          size={20}
-          color="#6b7280"
-          style={styles.inputIcon}
-        />
-      </View>
-      {errors.username && (
-        <Text style={styles.errorMsgText}>{errors.username}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Username"
+        value={username}
+        onChangeText={(text) => {
+          setUsername(text);
+          if (errors.username) setErrors({ ...errors, username: "" });
+        }}
+        autoCapitalize="none"
+        error={!!errors.username}
+        left={<TextInput.Icon icon="account-outline" />}
+        style={{ marginBottom: errors.username ? 0 : 12 }}
+      />
+      {errors.username && <HelperText type="error" visible={!!errors.username}>{errors.username}</HelperText>}
 
       {/* Password */}
-      <View
-        style={[styles.inputBox, errors.password ? styles.inputError : null]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#6b7280"
-          secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            if (errors.password) setErrors({ ...errors, password: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
-          style={styles.eyeIconBtn}
-        >
-          <Ionicons
-            name={showPassword ? "eye-off-outline" : "eye-outline"}
-            size={20}
-            color="#6b7280"
-          />
-        </TouchableOpacity>
-      </View>
-      {errors.password && (
-        <Text style={styles.errorMsgText}>{errors.password}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Password"
+        value={password}
+        secureTextEntry={!showPassword}
+        onChangeText={(text) => {
+          setPassword(text);
+          if (errors.password) setErrors({ ...errors, password: "" });
+        }}
+        autoCapitalize="none"
+        error={!!errors.password}
+        left={<TextInput.Icon icon="lock-outline" />}
+        right={<TextInput.Icon icon={showPassword ? "eye-off-outline" : "eye-outline"} onPress={() => setShowPassword(!showPassword)} />}
+        style={{ marginBottom: errors.password ? 0 : 12 }}
+      />
+      {errors.password && <HelperText type="error" visible={!!errors.password}>{errors.password}</HelperText>}
 
       {/* Confirm Password */}
-      <View
-        style={[
-          styles.inputBox,
-          errors.confirmPassword ? styles.inputError : null,
-        ]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Confirm Password"
-          placeholderTextColor="#6b7280"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={(text) => {
-            setConfirmPassword(text);
-            if (errors.confirmPassword)
-              setErrors({ ...errors, confirmPassword: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <Ionicons
-          name="lock-closed-outline"
-          size={20}
-          color="#6b7280"
-          style={styles.inputIcon}
-        />
-      </View>
-      {errors.confirmPassword && (
-        <Text style={styles.errorMsgText}>{errors.confirmPassword}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Confirm Password"
+        value={confirmPassword}
+        secureTextEntry={!showPassword}
+        onChangeText={(text) => {
+          setConfirmPassword(text);
+          if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: "" });
+        }}
+        autoCapitalize="none"
+        error={!!errors.confirmPassword}
+        left={<TextInput.Icon icon="lock-check-outline" />}
+        style={{ marginBottom: errors.confirmPassword ? 0 : 12 }}
+      />
+      {errors.confirmPassword && <HelperText type="error" visible={!!errors.confirmPassword}>{errors.confirmPassword}</HelperText>}
 
       {/* Submit Button */}
       <TouchableOpacity
@@ -272,26 +205,24 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          {isLoading ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <View style={styles.btnContent}>
-              <Text style={styles.submitBtnText}>Sign Up</Text>
-              <Ionicons
-                name="person-add-outline"
-                size={18}
-                color="#fff"
-                style={{ marginLeft: 6 }}
-              />
-            </View>
-          )}
+          <Button 
+            mode="text" 
+            onPress={handleSubmit} 
+            loading={isLoading} 
+            disabled={isLoading}
+            labelStyle={{ color: '#fff', fontSize: 15, fontWeight: '600' }}
+            icon={() => <Ionicons name="person-add-outline" size={18} color="#fff" />}
+            style={{ width: '100%', height: '100%', justifyContent: 'center' }}
+          >
+            Sign Up
+          </Button>
         </LinearGradient>
       </TouchableOpacity>
 
       {/* Divider */}
       <View style={styles.divider}>
         <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or sign up with</Text>
+        <Text variant="labelSmall" style={styles.dividerText}>or sign up with</Text>
         <View style={styles.dividerLine} />
       </View>
 
@@ -307,21 +238,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}
           onPress={() => onSocialLogin("Facebook")}
         >
-          <FontAwesome
-            name="facebook"
-            size={20}
-            color={AppColors.socialFacebook}
-          />
+          <FontAwesome name="facebook" size={20} color={AppColors.socialFacebook} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}
           onPress={() => onSocialLogin("TikTok")}
         >
-          <Ionicons
-            name="logo-tiktok"
-            size={20}
-            color={AppColors.socialTiktok}
-          />
+          <Ionicons name="logo-tiktok" size={20} color={AppColors.socialTiktok} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}

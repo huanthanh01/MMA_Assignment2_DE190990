@@ -3,21 +3,20 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { TextInput, Button, HelperText, Text, useTheme as usePaperTheme } from "react-native-paper";
 import { AppColors } from "../constants/colors";
 import { resetUserPassword } from "../utils/database";
 import { styles } from "../components/styles/ResetPassword.styles";
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
+  const theme = usePaperTheme();
   const { userId } = useLocalSearchParams<{ userId: string }>();
 
   const [newPassword, setNewPassword] = useState("");
@@ -150,60 +149,49 @@ export default function ResetPasswordScreen() {
                   <Ionicons name="key-outline" size={32} color="#fff" />
                 </LinearGradient>
 
-                <Text style={styles.title}>Reset Password</Text>
-                <Text style={styles.subtitle}>
+                <Text variant="headlineSmall" style={styles.title}>Reset Password</Text>
+                <Text variant="bodyMedium" style={styles.subtitle}>
                   Create a new strong password for your account
                 </Text>
 
                 {/* General Error */}
                 {errors.general && (
-                  <View style={styles.generalError}>
-                    <Text style={styles.generalErrorText}>
+                  <View style={{
+                    backgroundColor: "rgba(239, 68, 68, 0.1)",
+                    borderRadius: 10,
+                    padding: 12,
+                    marginBottom: 12,
+                    borderWidth: 1,
+                    borderColor: "rgba(239, 68, 68, 0.3)",
+                  }}>
+                    <Text style={{ color: "#ef4444", fontSize: 13, fontWeight: "600", textAlign: "center" }}>
                       ⚠️ {errors.general}
                     </Text>
                   </View>
                 )}
 
                 {/* New Password */}
-                <View
-                  style={[
-                    styles.inputBox,
-                    errors.newPassword ? styles.inputError : null,
-                  ]}
-                >
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="New Password"
-                    placeholderTextColor="#6b7280"
-                    secureTextEntry={!showPassword}
-                    value={newPassword}
-                    onChangeText={(text) => {
-                      setNewPassword(text);
-                      if (errors.newPassword)
-                        setErrors({ ...errors, newPassword: "" });
-                      if (errors.general)
-                        setErrors({ ...errors, general: "" });
-                    }}
-                    autoCapitalize="none"
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.eyeIconBtn}
-                  >
-                    <Ionicons
-                      name={showPassword ? "eye-off-outline" : "eye-outline"}
-                      size={20}
-                      color="#6b7280"
-                    />
-                  </TouchableOpacity>
-                </View>
-                {errors.newPassword && (
-                  <Text style={styles.errorMsgText}>{errors.newPassword}</Text>
-                )}
+                <TextInput
+                  mode="outlined"
+                  label="New Password"
+                  value={newPassword}
+                  secureTextEntry={!showPassword}
+                  onChangeText={(text) => {
+                    setNewPassword(text);
+                    if (errors.newPassword) setErrors({ ...errors, newPassword: "" });
+                    if (errors.general) setErrors({ ...errors, general: "" });
+                  }}
+                  autoCapitalize="none"
+                  error={!!errors.newPassword}
+                  left={<TextInput.Icon icon="lock-outline" />}
+                  right={<TextInput.Icon icon={showPassword ? "eye-off-outline" : "eye-outline"} onPress={() => setShowPassword(!showPassword)} />}
+                  style={{ marginBottom: errors.newPassword ? 0 : 12 }}
+                />
+                {errors.newPassword && <HelperText type="error" visible={!!errors.newPassword}>{errors.newPassword}</HelperText>}
 
                 {/* Password Requirements */}
                 <View style={styles.requirementsContainer}>
-                  <Text style={styles.requirementsTitle}>
+                  <Text variant="labelLarge" style={styles.requirementsTitle}>
                     Password Requirements
                   </Text>
                   <RequirementItem
@@ -221,41 +209,22 @@ export default function ResetPasswordScreen() {
                 </View>
 
                 {/* Confirm Password */}
-                <View
-                  style={[
-                    styles.inputBox,
-                    errors.confirmPassword ? styles.inputError : null,
-                  ]}
-                >
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Confirm New Password"
-                    placeholderTextColor="#6b7280"
-                    secureTextEntry={!showConfirm}
-                    value={confirmPassword}
-                    onChangeText={(text) => {
-                      setConfirmPassword(text);
-                      if (errors.confirmPassword)
-                        setErrors({ ...errors, confirmPassword: "" });
-                    }}
-                    autoCapitalize="none"
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowConfirm(!showConfirm)}
-                    style={styles.eyeIconBtn}
-                  >
-                    <Ionicons
-                      name={showConfirm ? "eye-off-outline" : "eye-outline"}
-                      size={20}
-                      color="#6b7280"
-                    />
-                  </TouchableOpacity>
-                </View>
-                {errors.confirmPassword && (
-                  <Text style={styles.errorMsgText}>
-                    {errors.confirmPassword}
-                  </Text>
-                )}
+                <TextInput
+                  mode="outlined"
+                  label="Confirm New Password"
+                  value={confirmPassword}
+                  secureTextEntry={!showConfirm}
+                  onChangeText={(text) => {
+                    setConfirmPassword(text);
+                    if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: "" });
+                  }}
+                  autoCapitalize="none"
+                  error={!!errors.confirmPassword}
+                  left={<TextInput.Icon icon="lock-check-outline" />}
+                  right={<TextInput.Icon icon={showConfirm ? "eye-off-outline" : "eye-outline"} onPress={() => setShowConfirm(!showConfirm)} />}
+                  style={{ marginBottom: errors.confirmPassword ? 0 : 12 }}
+                />
+                {errors.confirmPassword && <HelperText type="error" visible={!!errors.confirmPassword}>{errors.confirmPassword}</HelperText>}
 
                 {/* Submit Button */}
                 <TouchableOpacity
@@ -265,7 +234,7 @@ export default function ResetPasswordScreen() {
                   ]}
                   activeOpacity={0.9}
                   onPress={handleResetPassword}
-                  disabled={isLoading}
+                  disabled={isLoading || !allRequirementsMet}
                 >
                   <LinearGradient
                     colors={AppColors.gradientBtn as any}
@@ -273,21 +242,17 @@ export default function ResetPasswordScreen() {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   >
-                    {isLoading ? (
-                      <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                      <View style={styles.btnContent}>
-                        <Text style={styles.submitBtnText}>
-                          Reset Password
-                        </Text>
-                        <Ionicons
-                          name="lock-closed-outline"
-                          size={18}
-                          color="#fff"
-                          style={{ marginLeft: 6 }}
-                        />
-                      </View>
-                    )}
+                    <Button 
+                      mode="text" 
+                      onPress={handleResetPassword} 
+                      loading={isLoading} 
+                      disabled={isLoading || !allRequirementsMet}
+                      labelStyle={{ color: '#fff', fontSize: 15, fontWeight: '600' }}
+                      icon={() => <Ionicons name="lock-closed-outline" size={18} color="#fff" />}
+                      style={{ width: '100%', height: '100%', justifyContent: 'center' }}
+                    >
+                      Reset Password
+                    </Button>
                   </LinearGradient>
                 </TouchableOpacity>
               </>
@@ -302,8 +267,8 @@ export default function ResetPasswordScreen() {
                   />
                 </View>
 
-                <Text style={styles.successTitle}>Password Reset!</Text>
-                <Text style={styles.successSubtitle}>
+                <Text variant="headlineSmall" style={styles.successTitle}>Password Reset!</Text>
+                <Text variant="bodyMedium" style={styles.successSubtitle}>
                   Your password has been changed successfully.{"\n"}
                   You can now login with your new password.
                 </Text>

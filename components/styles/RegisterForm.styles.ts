@@ -17,40 +17,6 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     fontWeight: "300",
   },
-  inputBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    height: 48,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderWidth: 1.5,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  inputError: {
-    borderColor: AppColors.error,
-  },
-  textInput: {
-    flex: 1,
-    color: "#fff",
-    fontSize: 14,
-    height: "100%",
-  },
-  inputIcon: {
-    marginLeft: 10,
-  },
-  eyeIconBtn: {
-    padding: 6,
-  },
-  errorMsgText: {
-    color: AppColors.error,
-    fontSize: 11,
-    marginTop: -8,
-    marginBottom: 10,
-    paddingLeft: 4,
-  },
   submitBtn: {
     width: "100%",
     height: 48,

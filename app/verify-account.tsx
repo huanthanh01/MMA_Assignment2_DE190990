@@ -3,21 +3,20 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { TextInput, Button, HelperText, Text, useTheme as usePaperTheme } from "react-native-paper";
 import { AppColors } from "../constants/colors";
 import { verifyUserAccount } from "../utils/database";
 import { styles } from "../components/styles/VerifyAccount.styles";
 
 export default function VerifyAccountScreen() {
   const router = useRouter();
+  const theme = usePaperTheme();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -116,84 +115,61 @@ export default function VerifyAccountScreen() {
                   <Ionicons name="shield-checkmark-outline" size={32} color="#fff" />
                 </LinearGradient>
 
-                <Text style={styles.title}>Verify Account</Text>
-                <Text style={styles.subtitle}>
+                <Text variant="headlineSmall" style={styles.title}>Verify Account</Text>
+                <Text variant="bodyMedium" style={styles.subtitle}>
                   Enter your username and email address to verify your identity
                 </Text>
 
                 {/* General Error */}
                 {errors.general && (
-                  <View style={styles.generalError}>
-                    <Text style={styles.generalErrorText}>
+                  <View style={{
+                    backgroundColor: "rgba(239, 68, 68, 0.1)",
+                    borderRadius: 10,
+                    padding: 12,
+                    marginBottom: 12,
+                    borderWidth: 1,
+                    borderColor: "rgba(239, 68, 68, 0.3)",
+                  }}>
+                    <Text style={{ color: "#ef4444", fontSize: 13, fontWeight: "600", textAlign: "center" }}>
                       ⚠️ {errors.general}
                     </Text>
                   </View>
                 )}
 
                 {/* Username */}
-                <View
-                  style={[
-                    styles.inputBox,
-                    errors.username ? styles.inputError : null,
-                  ]}
-                >
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Username"
-                    placeholderTextColor="#6b7280"
-                    value={username}
-                    onChangeText={(text) => {
-                      setUsername(text);
-                      if (errors.username)
-                        setErrors({ ...errors, username: "" });
-                      if (errors.general)
-                        setErrors({ ...errors, general: "" });
-                    }}
-                    autoCapitalize="none"
-                  />
-                  <Ionicons
-                    name="person-outline"
-                    size={20}
-                    color="#6b7280"
-                    style={styles.inputIcon}
-                  />
-                </View>
-                {errors.username && (
-                  <Text style={styles.errorMsgText}>{errors.username}</Text>
-                )}
+                <TextInput
+                  mode="outlined"
+                  label="Username"
+                  value={username}
+                  onChangeText={(text) => {
+                    setUsername(text);
+                    if (errors.username) setErrors({ ...errors, username: "" });
+                    if (errors.general) setErrors({ ...errors, general: "" });
+                  }}
+                  autoCapitalize="none"
+                  error={!!errors.username}
+                  left={<TextInput.Icon icon="account-outline" />}
+                  style={{ marginBottom: errors.username ? 0 : 12 }}
+                />
+                {errors.username && <HelperText type="error" visible={!!errors.username}>{errors.username}</HelperText>}
 
                 {/* Email */}
-                <View
-                  style={[
-                    styles.inputBox,
-                    errors.email ? styles.inputError : null,
-                  ]}
-                >
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Email"
-                    placeholderTextColor="#6b7280"
-                    keyboardType="email-address"
-                    value={email}
-                    onChangeText={(text) => {
-                      setEmail(text);
-                      if (errors.email)
-                        setErrors({ ...errors, email: "" });
-                      if (errors.general)
-                        setErrors({ ...errors, general: "" });
-                    }}
-                    autoCapitalize="none"
-                  />
-                  <Ionicons
-                    name="mail-outline"
-                    size={20}
-                    color="#6b7280"
-                    style={styles.inputIcon}
-                  />
-                </View>
-                {errors.email && (
-                  <Text style={styles.errorMsgText}>{errors.email}</Text>
-                )}
+                <TextInput
+                  mode="outlined"
+                  label="Email"
+                  value={email}
+                  onChangeText={(text) => {
+                    setEmail(text);
+                    if (errors.email) setErrors({ ...errors, email: "" });
+                    if (errors.general) setErrors({ ...errors, general: "" });
+                  }}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  error={!!errors.email}
+                  left={<TextInput.Icon icon="email-outline" />}
+                  style={{ marginBottom: errors.email ? 0 : 12 }}
+                />
+                {errors.email && <HelperText type="error" visible={!!errors.email}>{errors.email}</HelperText>}
 
                 {/* Verify Button */}
                 <TouchableOpacity
@@ -208,21 +184,17 @@ export default function VerifyAccountScreen() {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   >
-                    {isLoading ? (
-                      <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                      <View style={styles.btnContent}>
-                        <Text style={styles.submitBtnText}>
-                          Verify Account
-                        </Text>
-                        <Ionicons
-                          name="checkmark-circle-outline"
-                          size={18}
-                          color="#fff"
-                          style={{ marginLeft: 6 }}
-                        />
-                      </View>
-                    )}
+                    <Button 
+                      mode="text" 
+                      onPress={handleVerify} 
+                      loading={isLoading} 
+                      disabled={isLoading}
+                      labelStyle={{ color: '#fff', fontSize: 15, fontWeight: '600' }}
+                      icon={() => <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />}
+                      style={{ width: '100%', height: '100%', justifyContent: 'center' }}
+                    >
+                      Verify Account
+                    </Button>
                   </LinearGradient>
                 </TouchableOpacity>
               </>
@@ -237,8 +209,8 @@ export default function VerifyAccountScreen() {
                   />
                 </View>
 
-                <Text style={styles.successTitle}>Account Verified!</Text>
-                <Text style={styles.successSubtitle}>
+                <Text variant="headlineSmall" style={styles.successTitle}>Account Verified!</Text>
+                <Text variant="bodyMedium" style={styles.successSubtitle}>
                   Your identity has been confirmed successfully.{"\n"}
                   Click the link below to reset your password.
                 </Text>

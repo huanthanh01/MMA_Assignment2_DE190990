@@ -2,13 +2,8 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { TextInput, Button, Checkbox, HelperText, Text, useTheme as usePaperTheme } from "react-native-paper";
 import { AppColors } from "../constants/colors";
 import { User } from "../models/types";
 import { loginUser } from "../utils/database";
@@ -28,6 +23,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onToggleSignUp,
 }) => {
   const { isDark, setTheme } = useTheme();
+  const theme = usePaperTheme();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -55,11 +51,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       setIsLoading(true);
       setErrors({});
 
-      // Allow the UI to render the loading spinner before synchronous bcrypt blocks the JS thread
       await new Promise((resolve) => setTimeout(resolve, 50));
 
       try {
-        // Authenticate against SQLite database using bcryptjs
         const result = await loginUser(username.trim(), password);
 
         if (result.success && result.user) {
@@ -89,8 +83,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <View style={styles.formContent}>
-      <Text style={styles.formTitle}>Welcome Back</Text>
-      <Text style={styles.formSubtitle}>
+      <Text variant="headlineSmall" style={styles.formTitle}>Welcome Back</Text>
+      <Text variant="bodyMedium" style={styles.formSubtitle}>
         Sign in to your account to continue
       </Text>
 
@@ -106,77 +100,47 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             borderColor: "rgba(239, 68, 68, 0.3)",
           }}
         >
-          <Text
-            style={{
-              color: "#ef4444",
-              fontSize: 13,
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
+          <Text style={{ color: "#ef4444", fontSize: 13, fontWeight: "600", textAlign: "center" }}>
             ⚠️ {errors.general}
           </Text>
         </View>
       )}
 
       {/* Username Input */}
-      <View
-        style={[styles.inputBox, errors.username ? styles.inputError : null]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Username"
-          placeholderTextColor="#6b7280"
-          value={username}
-          onChangeText={(text) => {
-            setUsername(text);
-            if (errors.username) setErrors({ ...errors, username: "" });
-            if (errors.general) setErrors({ ...errors, general: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <Ionicons
-          name="person-outline"
-          size={20}
-          color="#6b7280"
-          style={styles.inputIcon}
-        />
-      </View>
-      {errors.username && (
-        <Text style={styles.errorMsgText}>{errors.username}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Username"
+        value={username}
+        onChangeText={(text) => {
+          setUsername(text);
+          if (errors.username) setErrors({ ...errors, username: "" });
+          if (errors.general) setErrors({ ...errors, general: "" });
+        }}
+        autoCapitalize="none"
+        error={!!errors.username}
+        left={<TextInput.Icon icon="account-outline" />}
+        style={{ marginBottom: errors.username ? 0 : 12 }}
+      />
+      {errors.username && <HelperText type="error" visible={!!errors.username}>{errors.username}</HelperText>}
 
       {/* Password Input */}
-      <View
-        style={[styles.inputBox, errors.password ? styles.inputError : null]}
-      >
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#6b7280"
-          secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            if (errors.password) setErrors({ ...errors, password: "" });
-            if (errors.general) setErrors({ ...errors, general: "" });
-          }}
-          autoCapitalize="none"
-        />
-        <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
-          style={styles.eyeIconBtn}
-        >
-          <Ionicons
-            name={showPassword ? "eye-off-outline" : "eye-outline"}
-            size={20}
-            color="#6b7280"
-          />
-        </TouchableOpacity>
-      </View>
-      {errors.password && (
-        <Text style={styles.errorMsgText}>{errors.password}</Text>
-      )}
+      <TextInput
+        mode="outlined"
+        label="Password"
+        value={password}
+        secureTextEntry={!showPassword}
+        onChangeText={(text) => {
+          setPassword(text);
+          if (errors.password) setErrors({ ...errors, password: "" });
+          if (errors.general) setErrors({ ...errors, general: "" });
+        }}
+        autoCapitalize="none"
+        error={!!errors.password}
+        left={<TextInput.Icon icon="lock-outline" />}
+        right={<TextInput.Icon icon={showPassword ? "eye-off-outline" : "eye-outline"} onPress={() => setShowPassword(!showPassword)} />}
+        style={{ marginBottom: errors.password ? 0 : 12 }}
+      />
+      {errors.password && <HelperText type="error" visible={!!errors.password}>{errors.password}</HelperText>}
 
       {/* Options Row */}
       <View style={styles.optionsRow}>
@@ -185,20 +149,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           onPress={() => setRememberMe(!rememberMe)}
           activeOpacity={0.8}
         >
-          <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-            {rememberMe && <Ionicons name="checkmark" size={12} color="#fff" />}
-          </View>
-          <Text style={styles.rememberText}>Remember me</Text>
+          <Ionicons
+            name={rememberMe ? "checkmark-circle" : "ellipse-outline"}
+            size={22}
+            color={rememberMe ? AppColors.primary : "rgba(255, 255, 255, 0.7)"}
+            style={{ marginRight: 8 }}
+          />
+          <Text variant="bodyMedium" style={[styles.rememberText, { color: "#e5e7eb" }]}>Remember me</Text>
         </TouchableOpacity>
 
         <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/verify-account" as any)}>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
+          <Text variant="bodySmall" style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
 
       {/* Theme Selector */}
       <View style={styles.themeRow}>
-        <Text style={styles.themeText}>Default Theme</Text>
+        <Text style={styles.themeText}>Theme</Text>
         <View style={styles.themeSelector}>
           <TouchableOpacity
             style={[styles.themeBtn, !isDark && styles.themeBtnActive]}
@@ -232,26 +199,24 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          {isLoading ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <View style={styles.btnContent}>
-              <Text style={styles.submitBtnText}>Login</Text>
-              <Ionicons
-                name="log-in-outline"
-                size={18}
-                color="#fff"
-                style={{ marginLeft: 6 }}
-              />
-            </View>
-          )}
+          <Button 
+            mode="text" 
+            onPress={handleSubmit} 
+            loading={isLoading} 
+            disabled={isLoading}
+            labelStyle={{ color: '#fff', fontSize: 15, fontWeight: '600' }}
+            icon={() => <Ionicons name="log-in-outline" size={18} color="#fff" />}
+            style={{ width: '100%', height: '100%', justifyContent: 'center' }}
+          >
+            Login
+          </Button>
         </LinearGradient>
       </TouchableOpacity>
 
       {/* Divider */}
       <View style={styles.divider}>
         <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or login with</Text>
+        <Text variant="labelSmall" style={styles.dividerText}>or login with</Text>
         <View style={styles.dividerLine} />
       </View>
 
@@ -267,21 +232,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}
           onPress={() => onSocialLogin("Facebook")}
         >
-          <FontAwesome
-            name="facebook"
-            size={20}
-            color={AppColors.socialFacebook}
-          />
+          <FontAwesome name="facebook" size={20} color={AppColors.socialFacebook} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}
           onPress={() => onSocialLogin("TikTok")}
         >
-          <Ionicons
-            name="logo-tiktok"
-            size={20}
-            color={AppColors.socialTiktok}
-          />
+          <Ionicons name="logo-tiktok" size={20} color={AppColors.socialTiktok} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.socialBtn, { borderColor: AppColors.primary + "40" }]}
